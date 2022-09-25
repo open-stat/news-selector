@@ -13,6 +13,7 @@
         "js/jquery-3.6.1.min.js",
         "js/optimal-select.min.js",
         "js/jquery.ellocate.js",
+        "js/tools.js",
         "js/app.js"
       ]
     }

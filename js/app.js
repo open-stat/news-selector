@@ -4,12 +4,11 @@ var appSelector = {
     _currentTarget: null,
     _selectable: true,
 
+
     /**
      *
      */
     init: function () {
-        console.log('init')
-
         appSelector.events.init();
     },
 
@@ -18,12 +17,8 @@ var appSelector = {
      *
      */
     deinit: function () {
-        console.log('deinit')
-
         $('.__news_selector_overlay').remove();
         appSelector.events.deinit();
-
-        // delete appSelector;
     },
 
 
@@ -56,22 +51,29 @@ var appSelector = {
          * @param event
          * @private
          */
-        _click: function (event) {
+        _click: async function (event) {
 
             event.preventDefault();
             event.stopPropagation();
 
             $('.__news_selector_overlay.__default_overlay').remove();
+            appSelector.deinit();
 
-            // console.log(event.target);
-            console.log($(event.target).ellocate().css);
+
+            let pathFull     = $(event.target).ellocate();
+            let pathOptimize = OptimalSelect.select(event.target);
+            let selection    = await tools.getStorage('selection');
 
             appSelector._addElementOverlay(event.target, {
-                color:'#0014ff',
+                color: selection.options.color || '#0014ff',
                 className: "__select_element"
             });
 
-            // appSelector._selectable = false;
+            tools.sendMessageRuntime('selectElement', {
+                target: selection.options.target,
+                pathFull: pathFull,
+                pathOptimize: pathOptimize
+            });
         },
 
 
@@ -194,18 +196,4 @@ var appSelector = {
         return 'A' + v1 + v2 + v3 + v4;
     },
 }
-
-
-
-
-
-$(function () {
-
-    chrome.storage.local.get(['status'], function(result) {
-        if (result.status === 'on') {
-            appSelector.init();
-        }
-    });
-});
-
 

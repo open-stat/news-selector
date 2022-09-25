@@ -1,29 +1,15 @@
 
-// chrome.runtime.onInstalled.addListener(() => {
-//     chrome.storage.local.set({status: value});
+/**
+ * Установка расширения
+ */
+// chrome.runtime.onInstalled.addListener(function () {
+//
 // });
 
-// chrome.runtime.onMessage.addListener(function(message, sender) {
-//     if(message.hasOwnProperty('init') &&
-//         message.init === true
-//     ) {
-//         chrome.scripting.executeScript({
-//             target: { tabId: tab.id },
-//             files: [
-//                 'js/jquery-3.6.1.min.js',
-//                 'js/app.js'
-//             ]
-//         });
-//     }
-// });
-//
+chrome.runtime.onMessage.addListener(function(rq, sender, sendResponse) {
+    return true;
+});
+
 // chrome.action.onClicked.addListener((tab) => {
-//
-//     chrome.scripting.executeScript({
-//         target: { tabId: tab.id },
-//         files: [
-//             'js/jquery-3.6.1.min.js',
-//             'js/app.js'
-//         ]
-//     });
+//     console.log(tab);
 // });

@@ -6,7 +6,7 @@ var popup = {
      */
     init: async function () {
 
-        let storage   = await popup._getStorage();
+        let storage   = await tools.getStorage();
         let activeTab = storage.hasOwnProperty('active_tab') && storage.active_tab ? storage.active_tab : '';
 
         if (activeTab && $(activeTab)[0]) {
@@ -16,7 +16,7 @@ var popup = {
 
         $('a[data-mdb-toggle="tab"]').each(function (key, tab) {
             tab.addEventListener('shown.mdb.tab', (event) => {
-                popup._setStorage('active_tab', $(event.target).attr('href'));
+                tools.setStorage('active_tab', $(event.target).attr('href'));
             })
         });
 
@@ -24,6 +24,23 @@ var popup = {
         popup.lists.init(storage);
         popup.page.init(storage);
         popup.test.init(storage);
+
+
+        if (window.opener && window.opener !== window) {
+            $('#btn-open-window').hide();
+        }
+
+        /**
+         * Обработка сообщений
+         */
+        chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+
+            if (message.hasOwnProperty('action') && message.action) {
+                switch (message.action) {
+                    case 'selectElement': popup.selectElement(message.data, sender, sendResponse); break;
+                }
+            }
+        });
 
 
         $('#btn-open-window').click(popup.openWindow);
@@ -35,7 +52,7 @@ var popup = {
                     .removeClass('active')
                     .trigger('change');
 
-                popup._clearStorage();
+                tools.clearStorage();
             }
         });
     },
@@ -67,10 +84,10 @@ var popup = {
             if (sourceRegionVal) {   sourceRegion.val(sourceRegionVal).addClass('active').trigger('change'); }
             if (sourceStartUrlVal) { sourceStartUrl.val(sourceStartUrlVal).addClass('active').trigger('change'); }
 
-            sourceTitle.change(function () {    popup._setStorage('source_title', $(this).val()); });
-            sourceTags.change(function () {     popup._setStorage('source_tags', $(this).val()); });
-            sourceRegion.change(function () {   popup._setStorage('source_region', $(this).val()); });
-            sourceStartUrl.change(function () { popup._setStorage('source_start_url', $(this).val()); });
+            sourceTitle.change(function () {    tools.setStorage('source_title', $(this).val()); });
+            sourceTags.change(function () {     tools.setStorage('source_tags', $(this).val()); });
+            sourceRegion.change(function () {   tools.setStorage('source_region', $(this).val()); });
+            sourceStartUrl.change(function () { tools.setStorage('source_start_url', $(this).val()); });
 
             popup.lists._initControls(storage);
         },
@@ -83,8 +100,8 @@ var popup = {
         _initControls: function (storage) {
 
             $('#btn-source-title').click(function () {
-                popup._getCurrentTab().then(function (tabs) {
-                    let result = tabs[0].url.match(/((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])/);
+                tools.getCurrentTab().then(function (tab) {
+                    let result = tab.url.match(/((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])/);
                     let domain = result[0] || '';
                     domain = domain.replace(/^www./, '');
 
@@ -113,8 +130,8 @@ var popup = {
             });
 
             $('#btn-source-start_url').click(function () {
-                popup._getCurrentTab().then(function (tabs) {
-                    $('#source-start_url').val(tabs[0].url)
+                tools.getCurrentTab().then(function (tab) {
+                    $('#source-start_url').val(tab.url)
                         .addClass('active')
                         .trigger('change');
                 });
@@ -410,7 +427,7 @@ var popup = {
                     lists.push(list);
                 })
 
-                popup._setStorage('lists', lists);
+                tools.setStorage('lists', lists);
             }
         }
     },
@@ -472,20 +489,20 @@ var popup = {
             if (pageClearAuthorVal)  pageClearAuthor.val(pageClearAuthorVal).addClass('active').trigger('change');
             if (pageClearContentVal) pageClearContent.val(pageClearContentVal).addClass('active').trigger('change');
 
-            pageTitle.change(function () {       popup._setStorage('page_title',        $(this).val()); });
-            pageDatePublish.change(function () { popup._setStorage('page_date_publish', $(this).val()); });
-            pageContent.change(function () {     popup._setStorage('page_content',      $(this).val()); });
-            pageTags.change(function () {        popup._setStorage('page_tags',         $(this).val()); });
-            pageRegion.change(function () {      popup._setStorage('page_region',       $(this).val()); });
-            pageCategory.change(function () {    popup._setStorage('page_category',     $(this).val()); });
-            pageCountViews.change(function () {  popup._setStorage('page_count_views',  $(this).val()); });
-            pageSourceUrl.change(function () {   popup._setStorage('page_source_url',   $(this).val()); });
-            pageAuthor.change(function () {      popup._setStorage('page_author',       $(this).val()); });
-            pageImage.change(function () {       popup._setStorage('page_image',        $(this).val()); });
-            pageDateFormat.change(function () {  popup._setStorage('page_date_format',  $(this).val()); });
+            pageTitle.change(function () {       tools.setStorage('page_title',        $(this).val()); });
+            pageDatePublish.change(function () { tools.setStorage('page_date_publish', $(this).val()); });
+            pageContent.change(function () {     tools.setStorage('page_content',      $(this).val()); });
+            pageTags.change(function () {        tools.setStorage('page_tags',         $(this).val()); });
+            pageRegion.change(function () {      tools.setStorage('page_region',       $(this).val()); });
+            pageCategory.change(function () {    tools.setStorage('page_category',     $(this).val()); });
+            pageCountViews.change(function () {  tools.setStorage('page_count_views',  $(this).val()); });
+            pageSourceUrl.change(function () {   tools.setStorage('page_source_url',   $(this).val()); });
+            pageAuthor.change(function () {      tools.setStorage('page_author',       $(this).val()); });
+            pageImage.change(function () {       tools.setStorage('page_image',        $(this).val()); });
+            pageDateFormat.change(function () {  tools.setStorage('page_date_format',  $(this).val()); });
 
-            pageClearAuthor.change(function () {   popup._setStorage('page_clear_author',   $(this).val()); });
-            pageClearContent.change(function () {  popup._setStorage('page_clear_content',  $(this).val()); });
+            pageClearAuthor.change(function () {   tools.setStorage('page_clear_author',   $(this).val()); });
+            pageClearContent.change(function () {  tools.setStorage('page_clear_content',  $(this).val()); });
 
             popup.page._initControls(storage);
         },
@@ -496,16 +513,16 @@ var popup = {
          */
         _initControls: function (storage) {
 
-            $('#btn-source-page-title').click(function () {    });
-            $('#btn-source-page-date_publish').click(function () {    });
-            $('#btn-source-page-content').click(function () {    });
-            $('#btn-source-page-tags').click(function () {    });
-            $('#btn-source-page-region').click(function () {    });
-            $('#btn-source-page-category').click(function () {    });
-            $('#btn-source-page-count_views').click(function () {    });
-            $('#btn-source-page-source_url').click(function () {    });
-            $('#btn-source-page-author').click(function () {    });
-            $('#btn-source-page-image').click(function () {    });
+            $('#btn-source-page-title').click(function () {         popup.startSelection({ target: 'page_title' })  });
+            $('#btn-source-page-date_publish').click(function () {  popup.startSelection({ target: 'date_publish' })  });
+            $('#btn-source-page-content').click(function () {       popup.startSelection({ target: 'content' })  });
+            $('#btn-source-page-tags').click(function () {          popup.startSelection({ target: 'tags' })  });
+            $('#btn-source-page-region').click(function () {        popup.startSelection({ target: 'region' })  });
+            $('#btn-source-page-category').click(function () {      popup.startSelection({ target: 'category' })  });
+            $('#btn-source-page-count_views').click(function () {   popup.startSelection({ target: 'count_views' }) });
+            $('#btn-source-page-source_url').click(function () {    popup.startSelection({ target: 'source_url' }) });
+            $('#btn-source-page-author').click(function () {        popup.startSelection({ target: 'author' }) });
+            $('#btn-source-page-image').click(function () {         popup.startSelection({ target: 'image' }) });
 
             $('.dropdown-page-date_format button').click(function () {
                 $('#source-page-date_format').val($(this).data('format'))
@@ -623,7 +640,7 @@ var popup = {
                             }
                         });
 
-                        popup._setStorage('page_clear_references', references)
+                        tools.setStorage('page_clear_references', references)
                         break;
 
                     case 'tags':
@@ -636,7 +653,7 @@ var popup = {
                             }
                         });
 
-                        popup._setStorage('page_clear_tags', tags);
+                        tools.setStorage('page_clear_tags', tags);
                         break;
 
                     case 'category':
@@ -649,7 +666,7 @@ var popup = {
                             }
                         });
 
-                        popup._setStorage('page_clear_categories', categories);
+                        tools.setStorage('page_clear_categories', categories);
                         break;
                 }
             }
@@ -672,29 +689,93 @@ var popup = {
 
 
     /**
-     *
+     * @param data
+     * @param sender
+     * @param sendResponse
+     * @returns {Promise<void>}
      */
-    startSelection: function () {
+    selectElement: async function (data, sender, sendResponse) {
 
-        popup._getCurrentTab().then(function (tabs) {
-            function injectedFunction() {
-                appSelector.init();
-            }
+        let path = data.hasOwnProperty('pathOptimize') && data.pathOptimize
+            ? data.pathOptimize
+            : data.selected.css;
 
-            chrome.scripting.executeScript({
-                target: { tabId: tabs[0].id },
-                func: injectedFunction
+        switch (data.target) {
+            case 'page_title':
+                tools.setStorage('page_title', path);
+                $('#source-page-title').val(path).addClass('active').trigger('change');
+                break;
+            case 'date_publish':
+                tools.setStorage('date_publish', path);
+                $('#source-page-date_publish').val(path).addClass('active').trigger('change');
+                break;
+            case 'content':
+                tools.setStorage('content', path);
+                $('#source-page-content').val(path).addClass('active').trigger('change');
+                break;
+            case 'tags':
+                tools.setStorage('tags', path);
+                $('#source-page-tags').val(path).addClass('active').trigger('change');
+                break;
+            case 'region':
+                tools.setStorage('region', path);
+                $('#source-page-region').val(path).addClass('active').trigger('change');
+                break;
+            case 'category':
+                tools.setStorage('category', path);
+                $('#source-page-category').val(path).addClass('active').trigger('change');
+                break;
+            case 'count_views':
+                tools.setStorage('count_views', path);
+                $('#source-page-count_views').val(path).addClass('active').trigger('change');
+                break;
+            case 'source_url':
+                tools.setStorage('source_url', path);
+                $('#source-page-source_url').val(path).addClass('active').trigger('change');
+                break;
+            case 'author':
+                tools.setStorage('author', path);
+                $('#source-page-author').val(path).addClass('active').trigger('change');
+                break;
+            case 'image':
+                tools.setStorage('image', path);
+                $('#source-page-image').val(path).addClass('active').trigger('change');
+                break;
+            case 'clear-author':
+                tools.setStorage('clear-author', path);
+                $('#source-page-clear-author').val(path).addClass('active').trigger('change');
+                break;
+            case 'clear-content':
+                tools.setStorage('clear-content', path);
+                $('#source-page-clear-content').val(path).addClass('active').trigger('change');
+                break;
+        }
+    },
+
+
+    /**
+     * @param options
+     */
+    startSelection: function (options) {
+
+        tools.getActiveTabs().then(function (tabs) {
+            tools.getCurrentTab().then(function (popupTab) {
+
+                let tabApp = tabs[0];
+
+                tools.setStorage('selection', {
+                    popupTabId: popupTab.id,
+                    options: options || {},
+                })
+
+                chrome.scripting.executeScript({
+                    target: { tabId:tabApp.id },
+                    func: function () {
+                        appSelector.deinit();
+                        appSelector.init();
+                    }
+                });
             });
-
-            $('#btn-start').hide();
-            $('#btn-stop').show();
-
-            $('body').addClass('start-selected');
-
-            chrome.storage.local.set({status: 'on'});
-
-        }).catch(function () {
-
         });
     },
 
@@ -704,23 +785,14 @@ var popup = {
      */
     stopSelection: function () {
 
-        popup._getCurrentTab().then(function (tabs) {
-            function injectedFunction() {
-                appSelector.deinit();
-            }
+        tools.getCurrentTab().then(function (tab) {
 
             chrome.scripting.executeScript({
-                target: { tabId: tabs[0].id },
-                func: injectedFunction
+                target: { tabId: tab.id },
+                func: function () {
+                    appSelector.deinit();
+                }
             });
-
-            $('#btn-start').show();
-            $('#btn-stop').hide();
-
-
-            $('body').removeClass('start-selected');
-
-            chrome.storage.local.set({status: 'off'});
         });
     },
 
@@ -749,118 +821,20 @@ var popup = {
             chrome.windows.create({
                 url: chrome.runtime.getURL("popup.html"),
                 type: "popup",
+                focused: true,
+                setSelfAsOpener: true,
                 width: width,
                 height: height,
                 top: Math.round(top),
-                left: Math.round(left),
+                left: Math.round(left)
             });
 
             window.close();
-        });
-    },
-
-
-    /**
-     * @returns {Promise<PermissionStatus|LockManagerSnapshot>}
-     * @private
-     */
-    _getCurrentTab: async function () {
-
-        return await chrome.tabs.query({
-            active: true,
-            currentWindow: true
-        });
-    },
-
-
-    /**
-     * @returns {Promise<unknown>}
-     * @private
-     */
-    _getStorage: async function (key) {
-
-        return new Promise((resolve, reject) => {
-            try {
-                chrome.storage.local.get('storage', function(result) {
-                    let storage = result.hasOwnProperty('storage') && result.storage || {};
-
-                    if (key) {
-                        let value = storage.hasOwnProperty(key) ? storage[key] : null;
-                        resolve(value);
-                    } else {
-                        resolve(storage);
-                    }
-                });
-
-            } catch (ex) {
-                reject(ex);
-            }
-        });
-    },
-
-
-    /**
-     * @param key
-     * @param value
-     * @private
-     */
-    _setStorage: async function (key, value) {
-
-        return new Promise((resolve, reject) => {
-            try {
-                chrome.storage.local.get('storage', function(result) {
-                    let storage = result.storage || {};
-                    storage[key] = value;
-
-                    chrome.storage.local.set({storage: storage}, function () {
-                        resolve();
-                    });
-                });
-            } catch (ex) {
-                reject(ex);
-            }
-        });
-    },
-
-
-    /**
-     * @param key
-     * @returns {Promise<unknown>}
-     * @private
-     */
-    _clearStorage: async function (key) {
-
-        return new Promise((resolve, reject) => {
-            try {
-                chrome.storage.local.get('storage', function(result) {
-                    let storage = result.hasOwnProperty('storage') && result.storage || {};
-
-                    if (key) {
-                        if (storage.hasOwnProperty(key)) {
-                            delete storage[key];
-                            chrome.storage.local.set({storage: storage}, function () {
-                                resolve();
-                            });
-
-                        } else {
-                            resolve();
-                        }
-
-                    } else {
-                        chrome.storage.local.set({storage: {}}, function () {
-                            resolve();
-                        });
-                    }
-                });
-            } catch (ex) {
-                reject(ex);
-            }
         });
     }
 }
 
 
 $(document).ready(function () {
-
     popup.init();
 });
