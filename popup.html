@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Подбор новостей</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="css/mdb.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/popup.css">
+    <script src="js/jquery-3.6.1.min.js"></script>
+    <script src="js/palette.js"></script>
+    <script src="js/popup.js"></script>
+</head>
+<body>
+    <header class="shadow-3 p-2 ps-3 mb-2 border-bottom">
+        <h4 class="float-start pt-2">Подбор новостей</h4>
+
+        <div class="float-end">
+            <button class="btn btn-lg btn-tertiary btn-floating" id="btn-options" title="Настройки">
+                <i class="fa fa-gear"></i>
+            </button>
+        </div>
+
+        <div class="float-end">
+            <button class="btn btn-lg btn-tertiary btn-floating" id="btn-open-window" title="Открыть в окне">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </button>
+        </div>
+
+        <div class="clearfix"></div>
+    </header>
+
+    <div class="container">
+
+        <ul class="nav nav-pills nav-justified mb-3">
+            <li class="nav-item">
+                <a class="nav-link active" data-mdb-toggle="tab" href="#tab-list">
+                    <i class="fa-solid fa-list"></i>
+                    Списки
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-mdb-toggle="tab" href="#tab-page">
+                    <i class="fa-regular fa-file-lines"></i>
+                    Страница
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-mdb-toggle="tab" href="#tab-test">
+                    <i class="fa-solid fa-bolt"></i>
+                    Проверка
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content was-validated">
+            <div class="tab-pane fade show active" id="tab-list">
+
+                <div class="float-end">
+                    <button class="btn btn-sm btn-danger" id="btn-clear-all">
+                        Очистить все
+                    </button>
+                </div>
+
+                <br><br>
+
+                <div class="d-flex">
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-title" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-title">Название ресурса</label>
+                        </div>
+                    </div>
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-title">
+                            <i class="fa-solid fa-caret-left fa-fw"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-tags" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-tags">Теги</label>
+                        </div>
+                    </div>
+                    <div class="p-1">
+                        <div class="dropdown float-end">
+                            <button class="btn btn-sm btn-secondary" type="button" data-mdb-toggle="dropdown">
+                                <i class="fa-solid fa-sort-down fa-fw"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-tags">
+                                <li><button class="dropdown-item" type="button">Новости</button></li>
+                                <li><button class="dropdown-item" type="button">Бизнес</button></li>
+                                <li><button class="dropdown-item" type="button">Авто</button></li>
+                                <li><button class="dropdown-item" type="button">Гос</button></li>
+                                <li><button class="dropdown-item" type="button">Бизнес</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-region" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-region">Регион</label>
+                        </div>
+                    </div>
+                    <div class="p-1">
+                        <div class="dropdown float-end">
+                            <button class="btn btn-sm btn-secondary" type="button" data-mdb-toggle="dropdown">
+                                <i class="fa-solid fa-sort-down fa-fw"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-regions">
+                                <li><button class="dropdown-item" type="button">Беларусь</button></li>
+                                <li><button class="dropdown-item" type="button">Минск</button></li>
+                                <li><button class="dropdown-item" type="button">Россия</button></li>
+                                <li><button class="dropdown-item" type="button">Украина</button></li>
+                                <li><button class="dropdown-item" type="button">Польша</button></li>
+                                <li><button class="dropdown-item" type="button">Литва</button></li>
+                                <li><button class="dropdown-item" type="button">Латвия</button></li>
+                                <li><button class="dropdown-item" type="button">Эстония</button></li>
+                                <li><button class="dropdown-item" type="button">Грузия</button></li>
+                                <li><button class="dropdown-item" type="button">Казахстан</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="url" id="source-start_url" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-title">Начальный адрес</label>
+                        </div>
+                    </div>
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-start_url">
+                            <i class="fa-solid fa-caret-left fa-fw"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="accordion" id="accordion-list"></div>
+
+                <br>
+
+                <button class="btn btn-sm btn-primary float-end" id="btn-list-add">
+                    <i class="fa fa-plus"></i>
+                    Добавить
+                </button>
+
+                <br>
+                <br>
+            </div>
+
+
+            <div class="tab-pane fade" id="tab-page">
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-title">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-title" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-title">Заголовок</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-date_publish">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-date_publish" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-date_publish">Дата публикации</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-content">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-content" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-content">Содержимое статьи</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-tags">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-tags" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-tags">Теги</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-region">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-region" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-region">Регион</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-category">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-category" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-category">Раздел / категория</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-count_views">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-count_views" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-count_views">Количество просмотров</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-source_url">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-source_url" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-source_url">Адрес источника новости</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-author">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-author" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-author">Автор</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1">
+                        <button type="button" class="btn btn-sm btn-secondary float-end" id="btn-source-page-image">
+                            <i class="fa-solid fa-arrow-pointer fa-fw"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-image" class="form-control form-control-sm" required/>
+                            <label class="form-label" for="source-page-image">Титульное изображение</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="p-1 w-100">
+                        <div class="form-outline mb-3">
+                            <input type="text" id="source-page-date_format" class="form-control form-control-sm" required placeholder="Регулярное выражение"/>
+                            <label class="form-label" for="source-page-date_format">Формат даты</label>
+                        </div>
+                    </div>
+                    <div class="p-1">
+                        <div class="dropdown float-end">
+                            <button class="btn btn-sm btn-secondary" type="button" data-mdb-toggle="dropdown">
+                                <i class="fa-solid fa-sort-down fa-fw"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-page-date_format">
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\s+(?<month_ru>[А-я]+)\s+(?<year>[\d]{4})~mu">dd месяц yyyy</button></li>
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\s+(?<month_ru>[а-я]+)\s+(?:(?<year>\d{4})|(?<current_year>))~mu">dd месяц yyyy|тек-год</button></li>
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\s+(?<month_ru>[а-я]+)\s+(?<year>[\d]{4})\s+(?<hour>[\d]+):(?<min>[\d]+)~mu">dd месяц yyyy hh:ii</button></li>
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\s+(?<month_ru>[а-я]+)\s+(?:(?<year>\d{4})|(?<current_year>))\s+(?<hour>[\d]+):(?<min>[\d]+)~mu">dd месяц yyyy|тек-год hh:ii</button></li>
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\s+(?<month_ru>[а-я]+)\s+(?<year>[\d]{4})\s+в\s+(?<hour>[\d]+):(?<min>[\d]+)~mu">dd месяц yyyy в hh:ii</button></li>
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\.(?<month>\d+)\.(?<year>[\d]{4})~mu">dd.mm.yyyy</button></li>
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\.(?<month>\d+)\.(?<year>[\d]{4})\s+(?<hour>[\d]{2}):(?<min>[\d]{2})~mu">dd.mm.yyyy hh:ii</button></li>
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\.(?<month>\d+)\.(?:(?<year>\d{4})|(?<current_year>))\s+(?<hour>[\d]{2}):(?<min>[\d]{2})~mu">dd.mm.yyyy|тек-год hh:ii</button></li>
+                                <li><button class="dropdown-item" type="button" data-format="~(?<day>\d+)\.(?<month>\d+)\.(?<year>[\d]{4})\s+в\s+(?<hour>[\d]{2}):(?<min>[\d]{2})~mu">dd.mm.yyyy в hh:ii</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <hr>
+                <br>
+
+                <h5>Очистка содержимого</h5>
+
+                <div class="page-clear-reject-references">
+                    <label class="form-label">Удаление ссылок</label>
+                    <div class="d-flex">
+                        <div class="p-1 w-100">
+                            <div class="form-outline mb-3">
+                                <input type="text" class="form-control form-control-sm" required placeholder="Регулярное выражение"/>
+                            </div>
+                        </div>
+                        <div class="p-1">
+                            <button type="button" class="btn btn-sm btn-secondary float-end btn-clear-references-add">
+                                <i class="fa-solid fa-plus fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-clear-reject-tags">
+                    <label class="form-label">Удаление тегов</label>
+                    <div class="d-flex">
+                        <div class="p-1 w-100">
+                            <div class="form-outline mb-3">
+                                <input type="text" class="form-control form-control-sm" required placeholder="Регулярное выражение"/>
+                            </div>
+                        </div>
+                        <div class="p-1">
+                            <button type="button" class="btn btn-sm btn-secondary float-end btn-clear-tags-add">
+                                <i class="fa-solid fa-plus fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-clear-reject-category">
+                    <label class="form-label">Удаление категорий</label>
+                    <div class="d-flex">
+                        <div class="p-1 w-100">
+                            <div class="form-outline mb-3">
+                                <input type="text" class="form-control form-control-sm" required placeholder="Регулярное выражение"/>
+                            </div>
+                        </div>
+                        <div class="p-1">
+                            <button type="button" class="btn btn-sm btn-secondary float-end btn-clear-category-add">
+                                <i class="fa-solid fa-plus fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-outline mb-3">
+                    <input type="text" id="source-page-clear-author" class="form-control form-control-sm" required placeholder="Регулярное выражение"/>
+                    <label class="form-label" for="source-page-clear-author">Автор</label>
+                </div>
+
+                <div class="form-outline mb-3">
+                    <input type="text" id="source-page-clear-content" class="form-control form-control-sm" required placeholder="Регулярное выражение"/>
+                    <label class="form-label" for="source-page-clear-content">Содержимое новости</label>
+                </div>
+
+            </div>
+
+
+            <div class="tab-pane fade" id="tab-test">
+                <button class="btn btn-sm btn-primary" id="btn-test-list">
+                    Загрузить списки
+                </button>
+
+                <button class="btn btn-sm btn-primary" id="btn-test-page">
+                    Загрузить страницу
+                </button>
+
+                <button class="btn btn-sm btn-warning" id="btn-test-result">
+                    Результат
+                </button>
+
+                <div class="clearfix"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/mdb.min.js"></script>
+</body>
+</html>

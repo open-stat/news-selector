@@ -1,2 +1,3 @@
-# news-selector
+# News selector
+
 Подбор новостей. Расширение для chrome
